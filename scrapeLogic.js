@@ -1,7 +1,8 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 require("dotenv").config();
-const path = require('path');
+const path = require("path");
+const fs = require("fs");
 
 
 const url = "https://www.sofascore.com/pt/";
@@ -57,6 +58,17 @@ const scrapeLogic = async (res) => {
         }
     }, aoVivo);
     console.log('click ok');
+
+    const outputDir = path.resolve(__dirname, "public/screenshots");
+if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true }); // Cria a pasta, se não existir
+}
+
+await page.screenshot({
+    path: path.join(outputDir, "screenshot.png"),});
+
+
+
     await page.screenshot({ path: 'pagina_error.png' });
     console.log('Screenshot tirado e salvo como "pagina_error.png".');
     res.send('Screenshot tirado e salvo como "pagina_error.png".');
