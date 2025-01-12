@@ -2,7 +2,6 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 require("dotenv").config();
 const path = require("path");
-const fs = require("fs");
 
 
 const url = "https://www.sofascore.com/pt/";
