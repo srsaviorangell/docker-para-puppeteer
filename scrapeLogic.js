@@ -1,6 +1,32 @@
 const puppeteer = require("puppeteer");
+const fs = require("fs");
 require("dotenv").config();
 
+const url = "https://www.sofascore.com/";
+
+const seletores = {
+  contgeral:'.Box.klGMtt ',
+  separdor:'.HorizontalDivider.gqlAIl',
+  ContCampenalto:'.Box.klGMtt >.Box.Flex.cBIkhT.jLRkRA',
+  nomePais: 'Box.Flex.eHnLBZ.kkrevz > a > .Text.cbiYVh',
+  contPaisOuLiga:'.Box.klGMtt >.Box.Flex.cBIkhT.jLRkRA > .Box.Flex.dOBJED.hURKmT',
+  paisOuLiga: '.Box.Flex.dOBJED.hURKmT .Text.bZlPcX', 
+  imgPais: '.Box.Flex.cBIkhT.jLRkRA img.Img.ccYJkt, .Box.Flex.cBIkhT.jLRkRA img.Img.kMzyHA, .Box.Flex.cBIkhT.jLRkRA img.Img.ccYJkt ',
+
+  contHorarioTempo:'.Box.jKVshf',
+  horario: '.Text.kcRyBI',
+  tempo: '.Box.Flex.jTiCHC.cRYpNI.sc-efac74ba-2.gxmYGv.score-box .Text.fjeMtb.currentScore bdi',
+
+  ContJogos:'.Box.dtLxRI',
+  nomeH1: '[data-testid="left_team"] .Text.ezSveL',
+  escudoH1: '[data-testid="left_team"] .Img.jbaYme',
+  nomeH2: '[data-testid="right_team"] .Text.ezSveL',
+  escudoH2: '[data-testid="right_team"] .Img.jbaYme',
+
+  contPlacar: '.Box.Flex.gulcjH.yaNbA',
+  placarH1: '[data-testid="left_score"] .Text.cvwZXc.currentScore',
+  placarH2: '[data-testid="right_score"] .Text.cvwZXc.currentScore'
+};
 const scrapeLogic = async (res) => {
   const browser = await puppeteer.launch({
     args: [
@@ -17,29 +43,18 @@ const scrapeLogic = async (res) => {
   try {
     const page = await browser.newPage();
 
-    await page.goto("https://developer.chrome.com/");
+    await page.goto(url, { timeout: 50000});
 
-    // Set screen size
-    await page.setViewport({ width: 1080, height: 1024 });
+    const aoVivo = '.Chip.elpdkn';
+    await page.waitForSelector(aoVivo, { visible: true });
 
-    // Type into search box
-    await page.type(".search-box__input", "automate beyond recorder");
-
-    // Wait and click on first result
-    const searchResultSelector = ".search-box__link";
-    await page.waitForSelector(searchResultSelector);
-    await page.click(searchResultSelector);
-
-    // Locate the full title with a unique string
-    const textSelector = await page.waitForSelector(
-      "text/Customize and automate"
-    );
-    const fullTitle = await textSelector.evaluate((el) => el.textContent);
-
-    // Print the full title
-    const logStatement = `The title of this blog post is ${fullTitle}`;
-    console.log(logStatement);
-    res.send(logStatement);
+    await page.evaluate((selector) => {
+        const button = document.querySelector(selector);
+        if (button) {
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+    }, aoVivo);
+    console.log('click ok');
   } catch (e) {
     console.error(e);
     res.send(`Something went wrong while running Puppeteer: ${e}`);
