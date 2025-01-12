@@ -1,26 +1,32 @@
 FROM node:current
 
 # Instalar pacotes necessários para o Chrome funcionar corretamente
-RUN apt-get update && apt-get install -y \
-  libxss1 \
-  libappindicator3-1 \
-  libasound2 \
-  libatk-bridge2.0-0 \
-  libatk1.0-0 \
-  libcups2 \
-  libdbus-1-3 \
-  libgdk-pixbuf2.0-0 \
-  libnspr4 \
-  libnss3 \
-  libx11-xcb1 \
-  libgbm1 \
-  libdrm2 \
-  libdrm-dev \
-  fonts-liberation \
-  xdg-utils \
-  wget \
-  ca-certificates \
-  --no-install-recommends
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
+    fonts-thai-tlwg \
+    fonts-khmeros \
+    fonts-kacst \
+    fonts-freefont-ttf \
+    dbus \
+    dbus-x11 \
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    wget \
+    ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar o Chrome
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
 
 # Definir diretório de trabalho
 WORKDIR /usr/src/app
