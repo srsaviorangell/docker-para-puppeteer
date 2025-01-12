@@ -48,8 +48,12 @@ const scrapeLogic = async (res = null) => {
     await page.goto(url, { timeout: 50000 });
 
     const aoVivo = '.Chip.elpdkn';
-    await page.waitForSelector(aoVivo, { visible: true, timeout: 60000 });
-
+    try {
+      await page.waitForSelector('.Chip.elpdkn', { timeout: 120000 }); // Aumentando o tempo limite para 120 segundos
+      // ...restante do código...
+    } catch (error) {
+      console.error('Erro ao esperar pelo seletor:', error);
+    }
     await page.evaluate((selector) => {
       const button = document.querySelector(selector);
       if (button) {
