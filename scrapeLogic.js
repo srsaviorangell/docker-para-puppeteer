@@ -48,7 +48,7 @@ const scrapeLogic = async (res) => {
     await page.goto(url, { timeout: 50000});
 
     const aoVivo = '.Chip.elpdkn';
-    await page.waitForSelector(aoVivo, { visible: true });
+    await page.waitForSelector(aoVivo, { visible: true, timeout: 50000 });
 
     await page.evaluate((selector) => {
         const button = document.querySelector(selector);
