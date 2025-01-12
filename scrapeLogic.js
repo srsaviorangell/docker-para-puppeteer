@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 require("dotenv").config();
 
-const url = "https://www.sofascore.com/";
+const url = "https://www.sofascore.com/pt/";
 
 const seletores = {
   contgeral:'.Box.klGMtt ',
@@ -55,6 +55,8 @@ const scrapeLogic = async (res) => {
         }
     }, aoVivo);
     console.log('click ok');
+    await page.screenshot({ path: 'pagina_error.png' });
+    console.log('Screenshot tirado e salvo como "pagina_error.png".');
   } catch (e) {
     console.error(e);
     res.send(`Something went wrong while running Puppeteer: ${e}`);
